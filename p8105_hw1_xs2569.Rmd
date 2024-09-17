@@ -23,6 +23,8 @@ names(penguins)
 head(penguins)   
 
 ```
+There are 8 variables, named species, island, bill_length_mm, bill_depth_mm, flopper_length_mm, body_mass, sex, year.
+
 ### 1.2 the size of the dataset
 ```{r}
 nrow_dataset <- nrow(penguins) # Get the number of columns in the dataset
@@ -38,7 +40,7 @@ cat("The mean flipper length is", mean_flipper_length, "\n")
 
 ### 1.4 a scatterplot 
 
-```{r}
+```{r warning = FALSE}
 
 plot1 <- ggplot(penguins, aes(bill_length_mm, flipper_length_mm,color = species)) + geom_point() + scale_color_manual(values = c("Adelie" = "red", "Chinstrap" = "blue", "Gentoo" = "green"))
 
@@ -47,6 +49,9 @@ plot1
 ggsave("penguin_scatterplot.png", plot = plot1, width = 8, height = 6, units = "in")
 
 ```
+The scatterplot reveals that although there is some overlap in the data among the three penguin species, each has distinct characteristics regarding bill length and flipper length. 
+Specifically, the Gentoo species generally exhibits higher flipper lengths compared to the other two species. 
+Meanwhile, the Chinstrap and Adelie species show similar flipper lengths, but the Chinstrap species tends to have a larger bill length than the Adelie
 
 # 2] Problem 2
 ```{r}
@@ -73,7 +78,7 @@ print(mean_is_greaterthan0)
 ```
 
 
-```{r eval = FALSE}
+```{r eval=FALSE}
 as_numeric_logical <- as.numeric(pull(sd, is_greaterthan0))
 as_numeric_char <- as.numeric(pull(sd, char_vec)) 
 as_numeric_factor <- as.numeric(as.character(pull(sd, factor_vec)))
@@ -85,3 +90,6 @@ mean_as_numeric_factor <- mean(as_numeric_factor, na.rm = TRUE) # NA values are 
 print(mean_as_numeric_logical)
 print(mean_as_numeric_char)
 print(mean_as_numeric_factor)
+```
+
+when character or factor variables are changed to numeric ones, letters or strings will be changed into NA, numbers characters will be changed into numbers.
