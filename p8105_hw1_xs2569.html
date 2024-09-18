@@ -1578,6 +1578,8 @@ length than the Adelie</p>
 </div>
 <div id="problem-2" class="section level1">
 <h1>2] Problem 2</h1>
+<div id="create-a-data-frame-take-the-mean" class="section level3">
+<h3>2.1 Create a data frame + take the mean</h3>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -1593,34 +1595,96 @@ sd &lt;- tibble(
   normal_dist = rnorm(10),
   is_greaterthan0 = normal_dist &gt; 0,
   char_vec = (&quot;DANCINGCAT&quot;),
+  char_vec2 = (&quot;1234567890&quot;),
   factor_vec = factor(sample(c(&quot;Level1&quot;, &quot;Level2&quot;, &quot;Level3&quot;), 10, replace = TRUE
+)),
+  factor_vec2 = factor(sample(c(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;), 10, replace = TRUE
 )))
 
 mean_normal_dist &lt;- mean(pull(sd, normal_dist))
 mean_is_greaterthan0 &lt;- mean(pull(sd, is_greaterthan0))
 ### mean_char_vec &lt;- mean(pull(sd, char_vec)) 
 # This will give an error
+### mean_char_vec2 &lt;- mean(pull(sd, char_vec2)) 
+# This will give an error
 ### mean_factor_vec &lt;- mean(pull(sd, mean_factor_vec)) 
+# This will give an error
+### mean_factor_vec2 &lt;- mean(pull(sd, mean_factor_vec2)) 
 # This will give an error
 
 print(mean_normal_dist)</code></pre>
 <pre><code>## [1] -0.3831574</code></pre>
 <pre class="r"><code>print(mean_is_greaterthan0)</code></pre>
 <pre><code>## [1] 0.4</code></pre>
+<div id="random_sample-this-works-because-random_sample-is-numeric" class="section level6">
+<h6>random_sample: This works because random_sample is numeric</h6>
+</div>
+<div id="logical_vector-this-works-because-truefalse-can-be-coerced-to-10" class="section level6">
+<h6>logical_vector: This works because TRUE/FALSE can be coerced to
+1/0</h6>
+</div>
+<div id="character_vector-this-wont-work-because-its-a-character-variable-both-numbers-and-strings" class="section level6">
+<h6>character_vector: This won’t work because it’s a character variable
+(both numbers and strings)</h6>
+</div>
+<div id="factor_vector-this-wont-work-because-its-a-factor" class="section level6">
+<h6>factor_vector: This won’t work because it’s a factor</h6>
+</div>
+</div>
+<div id="convert-variables-explain-why" class="section level3">
+<h3>2.2 convert variables + explain why</h3>
 <pre class="r"><code>as_numeric_logical &lt;- as.numeric(pull(sd, is_greaterthan0))
 as_numeric_char &lt;- as.numeric(pull(sd, char_vec)) 
+as_numeric_char2 &lt;- as.numeric(pull(sd, char_vec2))
 as_numeric_factor &lt;- as.numeric(as.character(pull(sd, factor_vec)))
+as_numeric_factor2 &lt;- as.numeric(as.character(pull(sd, factor_vec2)))
 
 mean_as_numeric_logical &lt;- mean(as_numeric_logical)
 mean_as_numeric_char &lt;- mean(as_numeric_char, na.rm = TRUE) # NA values are ignored
+mean_as_numeric_char2 &lt;- mean(as_numeric_char2, na.rm = TRUE) # NA values are ignored
 mean_as_numeric_factor &lt;- mean(as_numeric_factor, na.rm = TRUE) # NA values are ignored
+mean_as_numeric_factor2 &lt;- mean(as_numeric_factor2, na.rm = TRUE)
 
 print(mean_as_numeric_logical)
 print(mean_as_numeric_char)
-print(mean_as_numeric_factor)</code></pre>
-<p>when character or factor variables are changed to numeric ones,
-letters or strings will be changed into NA, numbers characters will be
-changed into numbers.</p>
+print(mean_as_numeric_char2)
+print(mean_as_numeric_factor)
+print(mean_as_numeric_factor2)</code></pre>
+<div id="what-happens" class="section level4">
+<h4>What Happens:</h4>
+<div id="logical-to-numeric-the-logical-values-true-false-are-coerced-to-1-and-0." class="section level6">
+<h6>logical to Numeric: The logical values (<code>TRUE</code>,
+<code>FALSE</code>) are coerced to 1 and 0.</h6>
+</div>
+<div id="character-to-numeric-characters-containing-letters-or-strings-cannot-be-directly-converted-to-numeric-values-so-as.numeric-on-character-variables-will-result-in-na-values-but-characters-containing-numbers-can-be-converted-to-numeric-numbers." class="section level6">
+<h6>character to Numeric: Characters containing letters or strings
+cannot be directly converted to numeric values, so
+<code>as.numeric()</code> on character variables will result in
+<code>NA</code> values, but characters containing numbers can be
+converted to numeric numbers.</h6>
+</div>
+<div id="factor-to-numeric-factors-have-underlying-integer-representations-their-levels.-when-you-coerce-a-factor-to-numeric-r-converts-each-level-to-its-corresponding-integer-code." class="section level6">
+<h6>factor to Numeric: Factors have underlying integer representations
+(their levels). When you coerce a factor to numeric, R converts each
+level to its corresponding integer code.</h6>
+</div>
+<div id="does-this-help-explain-the-mean-issue" class="section level5">
+<h5>Does This Help Explain the <code>mean()</code> Issue?</h5>
+<div id="logical-variables-taking-the-mean-works-because-r-converts-truefalse-to-1-and-0" class="section level6">
+<h6>logical variables: taking the mean works because R converts
+<code>TRUE</code>/<code>FALSE</code> to 1 and 0</h6>
+</div>
+<div id="character-variables-letters-cannot-be-coerced-to-numeric-but-character-numbers-can." class="section level6">
+<h6>character variables: letters cannot be coerced to numeric, but
+character numbers can.</h6>
+</div>
+<div id="factor-variables-when-the-level-names-contain-letters-it-cannot-be-coerced-to-numeric-but-factors-named-by-character-numbers-can." class="section level6">
+<h6>factor variables, when the level names contain letters, it cannot be
+coerced to numeric, but factors named by character numbers can.</h6>
+</div>
+</div>
+</div>
+</div>
 </div>
 
 

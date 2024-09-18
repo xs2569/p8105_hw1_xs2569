@@ -53,7 +53,8 @@ The scatterplot reveals that although there is some overlap in the data among th
 Specifically, the Gentoo species generally exhibits higher flipper lengths compared to the other two species. 
 Meanwhile, the Chinstrap and Adelie species show similar flipper lengths, but the Chinstrap species tends to have a larger bill length than the Adelie
 
-# 2] Problem 2
+# 2] Problem 2 
+### 2.1 Create a data frame + take the mean 
 ```{r}
 library(tidyverse)
 
@@ -62,34 +63,63 @@ sd <- tibble(
   normal_dist = rnorm(10),
   is_greaterthan0 = normal_dist > 0,
   char_vec = ("DANCINGCAT"),
+  char_vec2 = ("1234567890"),
   factor_vec = factor(sample(c("Level1", "Level2", "Level3"), 10, replace = TRUE
+)),
+  factor_vec2 = factor(sample(c("1", "2", "3"), 10, replace = TRUE
 )))
 
 mean_normal_dist <- mean(pull(sd, normal_dist))
 mean_is_greaterthan0 <- mean(pull(sd, is_greaterthan0))
 ### mean_char_vec <- mean(pull(sd, char_vec)) 
 # This will give an error
+### mean_char_vec2 <- mean(pull(sd, char_vec2)) 
+# This will give an error
 ### mean_factor_vec <- mean(pull(sd, mean_factor_vec)) 
+# This will give an error
+### mean_factor_vec2 <- mean(pull(sd, mean_factor_vec2)) 
 # This will give an error
 
 print(mean_normal_dist)
 print(mean_is_greaterthan0)
 
+
 ```
+###### random_sample: This works because random_sample is numeric
+###### logical_vector: This works because TRUE/FALSE can be coerced to 1/0
+###### character_vector: This won't work because it's a character variable (both numbers and strings)
+###### factor_vector: This won't work because it's a factor
 
 
+
+### 2.2 convert variables + explain why
 ```{r eval=FALSE}
 as_numeric_logical <- as.numeric(pull(sd, is_greaterthan0))
 as_numeric_char <- as.numeric(pull(sd, char_vec)) 
+as_numeric_char2 <- as.numeric(pull(sd, char_vec2))
 as_numeric_factor <- as.numeric(as.character(pull(sd, factor_vec)))
+as_numeric_factor2 <- as.numeric(as.character(pull(sd, factor_vec2)))
 
 mean_as_numeric_logical <- mean(as_numeric_logical)
 mean_as_numeric_char <- mean(as_numeric_char, na.rm = TRUE) # NA values are ignored
+mean_as_numeric_char2 <- mean(as_numeric_char2, na.rm = TRUE) # NA values are ignored
 mean_as_numeric_factor <- mean(as_numeric_factor, na.rm = TRUE) # NA values are ignored
+mean_as_numeric_factor2 <- mean(as_numeric_factor2, na.rm = TRUE)
 
 print(mean_as_numeric_logical)
 print(mean_as_numeric_char)
+print(mean_as_numeric_char2)
 print(mean_as_numeric_factor)
+print(mean_as_numeric_factor2)
+
 ```
 
-when character or factor variables are changed to numeric ones, letters or strings will be changed into NA, numbers characters will be changed into numbers.
+#### What Happens:
+###### logical to Numeric: The logical values (`TRUE`, `FALSE`) are coerced to 1 and 0.
+###### character to Numeric: Characters containing letters or strings cannot be directly converted to numeric values, so `as.numeric()` on character variables will result in `NA` values, but characters containing numbers can be converted to numeric numbers.
+###### factor to Numeric: Factors have underlying integer representations (their levels). When you coerce a factor to numeric, R converts each level to its corresponding integer code.
+
+##### Does This Help Explain the `mean()` Issue?
+###### logical variables: taking the mean works because R converts `TRUE`/`FALSE` to 1 and 0
+###### character variables: letters cannot be coerced to numeric, but character numbers can.
+###### factor variables, when the level names contain letters, it cannot be coerced to numeric, but factors named by character numbers can.
