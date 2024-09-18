@@ -3,9 +3,7 @@ title: "P8105_hw1_xs2569"
 author: "Xun Sun"
 date: 2024-09-12
 output: 
-  html_document:
-    toc: true
-    toc_float: true
+  github_document:
 ---
 
 # 1] problem 1
@@ -16,14 +14,26 @@ including names / values of important variables
 ```{r}
 library(ggplot2)
 data("penguins", package = "palmerpenguins")
-penguins
 summary(penguins)
-View(penguins)
-names(penguins)  
-head(penguins)   
 
 ```
 There are 8 variables, named species, island, bill_length_mm, bill_depth_mm, flopper_length_mm, body_mass, sex, year.
+
+Species [qualitative-nominal] : It includes Adelie, Chinstrap, and Gentoo penguins.
+
+Island [qualitative-nominal] : Observations are from Biscoe, Dream, and Torgersen islands.
+
+Bill Length (mm) [quantitative-continuous] : Ranging from 32.10 to 59.60 mm, with an average of approximately 44 mm.
+
+Bill Depth (mm) [quantitative-continuous] : Ranging from 13.10 to 21.50 mm, with an average of about 17 mm.
+
+Flipper Length (mm) [quantitative-continuous] : Ranging from 172.0 to 231.0 mm, with an average of about 201 mm.
+
+Body Mass (g) [quantitative-continuous] : Ranging from 2700 to 6300 g, with an average of about 4202 g.
+
+Sex [qualitative-binary] : Most records indicate female or male, with 11 unknown.
+
+Year [quantitative-discrete] : Data spans from 2007 to 2009, with a focus on the year 2008.
 
 ### 1.2 the size of the dataset
 ```{r}
@@ -117,7 +127,7 @@ print(mean_as_numeric_factor2)
 #### What Happens:
 ###### logical to Numeric: The logical values (`TRUE`, `FALSE`) are coerced to 1 and 0.
 ###### character to Numeric: Characters containing letters or strings cannot be directly converted to numeric values, so `as.numeric()` on character variables will result in `NA` values, but characters containing numbers can be converted to numeric numbers.
-###### factor to Numeric: Factors have underlying integer representations (their levels). When you coerce a factor to numeric, R converts each level to its corresponding integer code.
+###### factor to Numeric: when the level names contain letters, it cannot be coerced to numeric, but factors named by character numbers can.
 
 ##### Does This Help Explain the `mean()` Issue?
 ###### logical variables: taking the mean works because R converts `TRUE`/`FALSE` to 1 and 0
